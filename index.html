@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitFlex: Your Personal Fitness Companion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: #333;
+    }
+    .hero-bg {
+      background: url('https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/72721ca2-279d-4030-a80c-769b02f1d8d6.png') no-repeat center center/cover;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .fade-in { animation: fadeIn 2s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .bounce { animation: bounce 1s infinite; }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+      60% { transform: translateY(-5px); }
+    }
+    .section-bg {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 2rem;
+      margin: 1rem 0;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+    }
+    #bmiResult { transition: transform 0.3s ease-in-out; transform-origin: top; }
+    #bmiResult.hide { transform: scaleY(0); display: none; }
+    #bmiResult.show { transform: scaleY(1); display: block; }
+    .workout-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .workout-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    }
+    .progress-bar {
+      width: 0;
+      height: 10px;
+      border-radius: 6px;
+      background: linear-gradient(45deg, #4CAF50, #8BC34A);
+      transition: width 1s ease;
+    }
+    .tip-animation { animation: slideIn 0.5s ease-out; }
+    @keyframes slideIn {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-100 text-gray-800">
+
+  <!-- HEADER -->
+  <header class="bg-white shadow-md sticky top-0 z-10">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-3xl font-bold text-green-600">FitFlex</h1>
+      <nav class="space-x-4">
+        <a href="#home" class="text-gray-700 hover:text-green-500">Home</a>
+        <a href="#about" class="text-gray-700 hover:text-green-500">About</a>
+        <a href="#bmi" class="text-gray-700 hover:text-green-500">BMI Calculator</a>
+        <a href="#workouts" class="text-gray-700 hover:text-green-500">Workouts</a>
+        <a href="#tips" class="text-gray-700 hover:text-green-500">Tips</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section id="home" class="hero-bg text-white">
+    <div class="text-center fade-in">
+      <h2 class="text-5xl font-extrabold mb-4">Welcome to FitFlex</h2>
+      <p class="text-xl mb-8">Your Personal Fitness Companion – Achieve Your Goals with Style!</p>
+      <button id="ctaBtn" class="bg-green-500 text-white px-8 py-3 rounded-full text-lg bounce hover:bg-green-600">Get Started</button>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="py-16 container mx-auto px-4">
+    <div class="section-bg">
+      <h2 class="text-3xl font-bold mb-6 text-center">About FitFlex</h2>
+      <p class="text-lg">FitFlex is designed for college students like us who juggle studies, classes, and fitness goals. Our interactive platform offers easy-to-use tools to track your progress, calculate your BMI, and discover personalized workout plans. Built with a focus on simplicity and motivation, FitFlex helps you stay fit and healthy without the hassle. Join thousands of active students in managing their well-being!</p>
+      <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/1a9d9a9a-d8c4-403b-8714-bfa507f21b49.png" alt="Group exercising" class="mx-auto mt-6 rounded-lg shadow-lg"/>
+    </div>
+  </section>
+
+  <!-- BMI CALCULATOR -->
+  <section id="bmi" class="py-16 container mx-auto px-4">
+    <div class="section-bg bg-white">
+      <h2 class="text-3xl font-bold mb-6 text-center">BMI Calculator</h2>
+      <form id="bmiForm" class="max-w-md mx-auto">
+        <div class="mb-4">
+          <label for="weight" class="block text-sm font-medium text-gray-700">Weight (kg):</label>
+          <input type="number" id="weight" name="weight" class="mt-1 p-2 w-full border rounded" required>
+        </div>
+        <div class="mb-4">
+          <label for="height" class="block text-sm font-medium text-gray-700">Height (cm):</label>
+          <input type="number" id="height" name="height" class="mt-1 p-2 w-full border rounded" required>
+        </div>
+        <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Calculate BMI</button>
+      </form>
+      <div id="bmiResult" class="hide overflow-hidden mt-6">
+        <p id="bmiValue" class="text-2xl font-bold text-center"></p>
+        <p id="bmiCategory" class="text-lg mt-2 text-center"></p>
+        <div class="mt-4 h-2 w-full bg-gray-200 rounded">
+          <div class="progress-bar rounded"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKOUTS -->
+  <section id="workouts" class="py-16 container mx-auto px-4">
+    <div class="section-bg">
+      <h2 class="text-3xl font-bold mb-6 text-center">Workout Plans</h2>
+      <p class="text-center mb-8">Select a workout to see details and get started!</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="workout-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-type="cardio">
+          <h3 class="text-xl font-semibold mb-2">Cardio Blast</h3>
+          <p>High-intensity cardio for fat burning and stamina.</p>
+        </div>
+        <div class="workout-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-type="strength">
+          <h3 class="text-xl font-semibold mb-2">Strength Training</h3>
+          <p>Build muscle and strength with targeted exercises.</p>
+        </div>
+        <div class="workout-card bg-white p-6 rounded-lg shadow-md cursor-pointer" data-type="yoga">
+          <h3 class="text-xl font-semibold mb-2">Yoga & Flexibility</h3>
+          <p>Improve flexibility and mental well-being.</p>
+        </div>
+      </div>
+      <div id="workoutDetail" class="mt-8 bg-white p-6 rounded-lg shadow-md hide">
+        <h3 id="detailTitle" class="text-2xl font-bold mb-4"></h3>
+        <p id="detailDesc"></p>
+        <ul id="detailSteps" class="list-disc pl-5 mt-4"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section id="tips" class="py-16 container mx-auto px-4">
+    <div class="section-bg">
+      <h2 class="text-3xl font-bold mb-6 text-center">Fitness Tips</h2>
+      <div id="tipsContainer" class="space-y-4">
+        <div class="tip-animation bg-white p-4 rounded shadow">💧 Stay hydrated! Drink at least 8 glasses of water daily.</div>
+        <div class="tip-animation bg-white p-4 rounded shadow">🔥 Eat a balanced diet with veggies, proteins, and carbs.</div>
+        <div class="tip-animation bg-white p-4 rounded shadow">🎯 Set small goals to build momentum.</div>
+        <div class="tip-animation bg-white p-4 rounded shadow">🏃 Incorporate rest days to avoid burnout.</div>
+      </div>
+      <button id="addTipBtn" class="mt-6 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Add Your Own Tip</button>
+      <div id="addTipForm" class="mt-4 hide">
+        <textarea id="newTip" class="w-full p-2 border rounded" placeholder="Enter your fitness tip..."></textarea>
+        <button id="submitTip" class="mt-2 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Submit</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-gray-800 text-white py-8">
+    <div class="container mx-auto px-4 text-center">
+      <p>&copy; 2025 FitFlex. Built by a college student. Stay fit!</p>
+    </div>
+  </footer>
+
+  <!-- SCRIPT -->
+  <script>
+    // Smooth scroll
+    document.querySelectorAll('nav a').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+
+    // CTA scroll
+    document.getElementById('ctaBtn').addEventListener('click', () => {
+      document.querySelector('#bmi').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    // BMI Calculator
+    document.getElementById('bmiForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const weight = parseFloat(document.getElementById('weight').value);
+      const height = parseFloat(document.getElementById('height').value) / 100;
+      if (!weight || !height) return;
+
+      const bmi = (weight / (height * height)).toFixed(2);
+      let category = '';
+      if (bmi < 18.5) category = 'Underweight';
+      else if (bmi < 25) category = 'Normal weight';
+      else if (bmi < 30) category = 'Overweight';
+      else category = 'Obese';
+
+      document.getElementById('bmiValue').textContent = `Your BMI is ${bmi}`;
+      document.getElementById('bmiCategory').textContent = `Category: ${category}`;
+
+      const resultDiv = document.getElementById('bmiResult');
+      resultDiv.classList.remove('hide');
+      resultDiv.classList.add('show');
+
+      setTimeout(() => {
+        document.querySelector('.progress-bar').style.width = `${Math.min((bmi / 35) * 100, 100)}%`;
+      }, 100);
+    });
+
+    // Workout details
+    const workoutData = {
+      cardio: {
+        desc: 'Burn calories and improve heart health!',
+        steps: ['Warm-up: 5 min jogging', 'Interval sprints: 20 min', 'Cool-down: 5 min walking']
+      },
+      strength: {
+        desc: 'Target muscles for overall strength.',
+        steps: ['Squats: 3 sets of 10', 'Push-ups: 3 sets of 15', 'Planks: 3 sets of 30s']
+      },
+      yoga: {
+        desc: 'Enhance flexibility and reduce stress.',
+        steps: ['Mountain pose: Hold 30s', 'Downward dog: Hold 30s', 'Child pose: Hold 30s']
+      }
+    };
+
+    document.querySelectorAll('.workout-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const type = card.getAttribute('data-type');
+        const data = workoutData[type];
+
+        document.getElementById('detailTitle').textContent = card.querySelector('h3').textContent;
+        document.getElementById('detailDesc').textContent = data.desc;
+
+        const stepsList = document.getElementById('detailSteps');
+        stepsList.innerHTML = '';
+        data.steps.forEach(step => {
+          const li = document.createElement('li');
+          li.textContent = step;
+          stepsList.appendChild(li);
+        });
+
+        const detailDiv = document.getElementById('workoutDetail');
+        detailDiv.classList.remove('hide');
+        detailDiv.classList.add('show');
+      });
+    });
+
+    // Add tips
+    document.getElementById('addTipBtn').addEventListener('click', () => {
+      document.getElementById('addTipForm').classList.toggle('hide');
+    });
+
+    document.getElementById('submitTip').addEventListener('click', () => {
+      const newTip = document.getElementById('newTip').value.trim();
+      if (newTip) {
+        const tipDiv = document.createElement('div');
+        tipDiv.className = 'tip-animation bg-white p-4 rounded shadow';
+        tipDiv.textContent = newTip;
+        document.getElementById('tipsContainer').appendChild(tipDiv);
+        document.getElementById('newTip').value = '';
+        document.getElementById('addTipForm').classList.add('hide');
+      }
+    });
+  </script>
+</body>
+</html>
